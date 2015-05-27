@@ -1,0 +1,84 @@
+{
+    "daemon": {
+        "log_file":     "<%= node['sensutrapd']['daemon']['log_file'] %>",
+        "log_level":    "<%= node['sensutrapd']['daemon']['log_level'] %>",
+        "pid_file":     "/var/run/sensu-trapd/sensu-trapd.pid",
+        "user":         "root",
+        "group":        "root",
+        "trap_file":    "/opt/sensu-trapd/conf/traps.json"
+    },
+    "dispatcher": {
+        "host":             "localhost",
+        "port":             3030,
+        "timeout":          5,
+        "events_log":       "/var/log/sensu-trapd/sensu-trapd-events.log"
+    },
+    "mibs": {
+        "paths": ["/opt/sensu-trapd/conf/mibs/cisco"],
+        "mibs":	[
+			"CISCO-SMI",
+			"CISCO-ST-TC",
+			"CISCO-TC",
+			"CISCO-UNIFIED-COMPUTING-ADAPTOR-MIB",
+			"CISCO-UNIFIED-COMPUTING-COMPUTE-MIB",
+			"CISCO-UNIFIED-COMPUTING-EQUIPMENT-MIB",
+			"CISCO-UNIFIED-COMPUTING-FAULT-MIB",
+			"CISCO-UNIFIED-COMPUTING-MEMORY-MIB",
+			"CISCO-UNIFIED-COMPUTING-MIB",
+			"CISCO-UNIFIED-COMPUTING-NOTIFS-MIB",
+			"CISCO-UNIFIED-COMPUTING-PROCESSOR-MIB",
+			"CISCO-UNIFIED-COMPUTING-STORAGE-MIB",
+			"CISCO-UNIFIED-COMPUTING-TC-MIB",
+			"IF-MIB",
+			"INET-ADDRESS-MIB",
+			"ITU-ALARM-TC-MIB",
+			"RFC1213-MIB",
+			"SNMP-FRAMEWORK-MIB",
+			"SNMPv2-CONF",
+			"SNMPv2-MIB",
+			"SNMPv2-SMI",
+			"SNMPv2-TC"]
+    },
+    "snmp": {
+        "transport": {
+            "listen_address":   "<%= node['sensutrapd']['snmp']['transport']['listen_address'] %>",
+            "listen_port":      <%= node['sensutrapd']['snmp']['transport']['listen_port'] %>,
+            "udp": {
+                "enabled": true
+            },
+            "tcp": {
+                "enabled": true
+            }
+        },
+        "auth": {
+            "version2": {
+                "enabled":      true,
+                "community":    "<%= node['sensutrapd']['snmp']['auth']['v2']['community'] %>"
+            },
+            "version3": {
+                "enabled":      true,
+                "users": {
+                    "sensutrap": {
+                        "authentication": {
+                            "protocol": "MD5",
+                            "password": "<%= node['sensutrapd']['snmp']['auth']['v3']['sensutrap']['authentication_passwd'] %>"
+                        },
+                        "privacy": {
+                            "protocol": "DES",
+                            "password": "myPrivSecret"
+                        }
+                    },
+                    "test-user-nopriv": {
+                        "authentication": {
+                            "protocol": "MD5",
+                            "password": "<%= node['sensutrapd']['snmp']['auth']['v3']['sensutrap']['privacy_passwd'] %>"
+                        },
+                        "privacy": {
+                            "protocol": "none"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
